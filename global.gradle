@@ -1,0 +1,32 @@
+//扩展快
+ext {
+
+    //如果为true代表正式环境编译，module不能单独打包，false代表测试环境，module可以独立打包
+    isRelease = true
+
+    aRouterGeneratedPath = "com.xinrenlei.arouter"
+
+    androidID = [
+            compileSdkVersion        : 30,
+            buildToolsVersion        : "30.0.2",
+            applicationId            : "com.xinrenlei.moduletest",
+            minSdkVersion            : 21,
+            targetSdkVersion         : 30,
+            versionCode              : 1,
+            versionName              : "1.0",
+            testInstrumentationRunner: "androidx.test.runner.AndroidJUnitRunner"
+    ]
+
+    appID = [
+            app     : "com.xinrenlei.moduletest",
+            client  : "com.xinrenlei.client",
+            business: "com.xinrenlei.business"
+    ]
+
+    dependenciesID = [
+            appcompat: 'androidx.appcompat:appcompat:1.2.0',
+            material : 'com.google.android.material:material:1.2.1',
+            blankj   : 'com.blankj:utilcodex:1.29.0'//丰富的工具类
+    ]
+
+}

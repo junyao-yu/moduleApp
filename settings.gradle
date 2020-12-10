@@ -1,0 +1,8 @@
+include ':common'
+include ':arouter-annotation'
+include ':arouter-api'
+include ':arouter-compiler'
+include ':client'
+include ':business'
+include ':app'
+rootProject.name = "moduleTest"

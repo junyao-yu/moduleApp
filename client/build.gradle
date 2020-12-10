@@ -1,0 +1,74 @@
+if (isRelease) {
+    apply plugin: 'com.android.library'//正式环境，模块不能独立运行
+    println('business---library')
+} else {
+    apply plugin: 'com.android.application' //开发环境，模块可以独立运行
+    println('business---application')
+}
+
+android {
+    compileSdkVersion androidID.compileSdkVersion
+    buildToolsVersion androidID.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion androidID.minSdkVersion
+        targetSdkVersion androidID.targetSdkVersion
+        versionCode androidID.versionCode
+        versionName androidID.versionName
+
+        testInstrumentationRunner androidID.testInstrumentationRunner
+        consumerProguardFiles "consumer-rules.pro"
+
+        // 在gradle文件中配置选项参数值（用于APT传参接收）
+        // 同学们注意：切记：必须写在defaultConfig节点下
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [moduleName: project.getName(), aRouterGeneratedPath: aRouterGeneratedPath]
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    sourceSets {
+        main {
+            if (isRelease) {//如果是正式环境
+                //集成化模式，整个项目打包成apk
+                manifest.srcFile 'src/main/AndroidManifest.xml'
+
+                java {
+                    //release时debug包下的代码没有用，不需要合到主工程
+                    exclude '**debug**'
+                }
+            } else {
+                //组件化模式，可以独立运行
+                manifest.srcFile 'src/main/debug/AndroidManifest.xml'
+            }
+        }
+    }
+}
+
+dependencies {
+
+    dependenciesID.each {
+        k, v -> implementation v
+    }
+
+    implementation project(':arouter-annotation')
+    annotationProcessor project(':arouter-compiler')
+
+    implementation project(':common')
+
+    testImplementation 'junit:junit:4.+'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+}

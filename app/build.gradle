@@ -1,0 +1,63 @@
+plugins {
+    id 'com.android.application'
+}
+
+//完成的方式，相对来说性能好点，不过也可以直接调用，如dependenciesID
+//def androidID = rootProject.ext.androidID
+
+android {
+    compileSdkVersion androidID.compileSdkVersion
+    buildToolsVersion androidID.buildToolsVersion
+
+    defaultConfig {
+        applicationId androidID.applicationId
+        minSdkVersion androidID.minSdkVersion
+        targetSdkVersion androidID.targetSdkVersion
+        versionCode androidID.versionCode
+        versionName androidID.versionName
+
+        testInstrumentationRunner androidID.testInstrumentationRunner
+
+        // 在gradle文件中配置选项参数值（用于APT传参接收）
+        // 同学们注意：切记：必须写在defaultConfig节点下
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [moduleName: project.getName(), aRouterGeneratedPath: aRouterGeneratedPath]
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+}
+
+dependencies {
+
+    dependenciesID.each {
+        k, v -> implementation v
+    }
+
+    testImplementation 'junit:junit:4.+'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    implementation project(':arouter-annotation')
+    annotationProcessor project(':arouter-compiler')
+
+    if (isRelease) {//正式包，引入module
+        implementation project(':business')
+        implementation project(':client')
+    }
+
+    implementation project(':common')
+}
