@@ -23,4 +23,9 @@
         android:text="去business模块"
         android:onClick="toBusiness"/>
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
 </LinearLayout>

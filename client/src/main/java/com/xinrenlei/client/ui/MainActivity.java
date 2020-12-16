@@ -2,6 +2,7 @@ package com.xinrenlei.client.ui;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -43,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
 
         TextView textView = findViewById(R.id.text);
         textView.setText("client >>> name: " + name + ", age: " + age + ", isAdult: " + isAdult);
+
+        ImageView imageView = findViewById(R.id.imageView);
+        imageView.setImageResource(businessDrawable.getTestDrawable());
     }
 
     public void toApp(View view) {

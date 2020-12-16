@@ -191,34 +191,35 @@ public class ARouterProcessor extends AbstractProcessor {
                 messager.printMessage(Diagnostic.Kind.ERROR, "@ARouter注解未按规范配置。如/app/MainActivity");
             }
 
-            //定义生成类实现的接口（Group Path）
-            TypeElement pathType = elementTool.getTypeElement(ProcessorConfig.AROUTER_API_PATH);
-            if (pathType == null) {
-                messager.printMessage(Diagnostic.Kind.NOTE, "Path接口路径: " + ProcessorConfig.AROUTER_API_PATH);
-                messager.printMessage(Diagnostic.Kind.NOTE, "pathType 为空");
-            }
+        }
 
-            TypeElement groupType = elementTool.getTypeElement(ProcessorConfig.AROUTER_API_GROUP);
-            if (groupType == null) {
-                messager.printMessage(Diagnostic.Kind.NOTE, "Group接口路径: " + ProcessorConfig.AROUTER_API_GROUP);
-                messager.printMessage(Diagnostic.Kind.NOTE, "groupType 为空");
-            }
+        //定义生成类实现的接口（Group Path）
+        TypeElement pathType = elementTool.getTypeElement(ProcessorConfig.AROUTER_API_PATH);
+        if (pathType == null) {
+            messager.printMessage(Diagnostic.Kind.NOTE, "Path接口路径: " + ProcessorConfig.AROUTER_API_PATH);
+            messager.printMessage(Diagnostic.Kind.NOTE, "pathType 为空");
+        }
 
-            //第一步,Path文件
-            try {
-                createPathFile(pathType);
-            } catch (IOException e) {
-                e.printStackTrace();
-                messager.printMessage(Diagnostic.Kind.NOTE, "生成PATH模板是异常：" + e.getMessage());
-            }
+        TypeElement groupType = elementTool.getTypeElement(ProcessorConfig.AROUTER_API_GROUP);
+        if (groupType == null) {
+            messager.printMessage(Diagnostic.Kind.NOTE, "Group接口路径: " + ProcessorConfig.AROUTER_API_GROUP);
+            messager.printMessage(Diagnostic.Kind.NOTE, "groupType 为空");
+        }
 
-            //第二部，Group文件
-            try {
-                createGroupFile(groupType, pathType);
-            } catch (IOException e) {
-                e.printStackTrace();
-                messager.printMessage(Diagnostic.Kind.NOTE, "生成GROUP模板是异常：" + e.getMessage());
-            }
+        //第一步,Path文件
+        try {
+            createPathFile(pathType);
+        } catch (IOException e) {
+            e.printStackTrace();
+            messager.printMessage(Diagnostic.Kind.NOTE, "生成PATH模板是异常：" + e.getMessage());
+        }
+
+        //第二部，Group文件
+        try {
+            createGroupFile(groupType, pathType);
+        } catch (IOException e) {
+            e.printStackTrace();
+            messager.printMessage(Diagnostic.Kind.NOTE, "生成GROUP模板是异常：" + e.getMessage());
         }
 
         //true 表示后续处理器不会再处理（已经处理完成）

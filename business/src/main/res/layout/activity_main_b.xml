@@ -23,4 +23,9 @@
         android:text="去app模块"
         android:onClick="toApp"/>
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
 </LinearLayout>

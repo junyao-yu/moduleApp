@@ -128,6 +128,7 @@ public class ParameterProcessor extends AbstractProcessor {
                 messager.printMessage(Diagnostic.Kind.NOTE,
                         "ParameterProcessorAPT生成获取参数类文件：" + className.packageName() + "." + finalClassName);
 
+
                 //开始生成文件  eg: MainActivity$$Parameter
                 try {
                     JavaFile.builder(className.packageName(),
