@@ -111,6 +111,8 @@ public class ParameterProcessor extends AbstractProcessor {
                 ParameterFactory factory = new ParameterFactory.Builder(parameterSpec)
                         .setClassName(className)
                         .setMessager(messager)
+                        .setElementUtils(elementUtils)
+                        .setTypeUtils(typeUtils)
                         .build();
 
                 // MainActivity t = (MainActivity) activity;

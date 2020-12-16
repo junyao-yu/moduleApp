@@ -19,6 +19,8 @@ public interface ProcessorConfig {
 
     String AROUTER_API_PACKAGE = "com.xinrenlei.arouter_api";
 
+    String AS_DRAWABLE = AROUTER_API_PACKAGE + ".AsDrawable";
+
     String AROUTER_API_GROUP = AROUTER_API_PACKAGE + ".ARouterGroup";
 
     String AROUTER_API_PATH = AROUTER_API_PACKAGE + ".ARouterPath";
@@ -52,7 +54,12 @@ public interface ProcessorConfig {
     // String全类名
     String STRING = "java.lang.String";
 
+    //Serializable类全名
+    String SERIALIZABLE = "java.io.Serializable";
+
     // ARouter aip 的 ParmeterGet 的 生成文件名称 $$Parameter
     String PARAMETER_FILE_NAME = "$$Parameter";
+
+    String ROUTER_MANAGER = "RouterManager";
 
 }

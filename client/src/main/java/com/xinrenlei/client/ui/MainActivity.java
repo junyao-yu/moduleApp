@@ -12,6 +12,7 @@ import com.xinrenlei.arouter_annotation.Parameter;
 import com.xinrenlei.arouter_api.ParameterManager;
 import com.xinrenlei.arouter_api.RouterManager;
 import com.xinrenlei.client.R;
+import com.xinrenlei.common.business.BusinessDrawable;
 
 /**
  * Auth：yujunyao
@@ -29,6 +30,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Parameter
     boolean isAdult;
+
+    @Parameter(name = "/business/drawable")
+    BusinessDrawable businessDrawable;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

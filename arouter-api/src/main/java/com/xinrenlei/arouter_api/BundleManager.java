@@ -5,6 +5,8 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 
+import java.io.Serializable;
+
 /**
  * Auth：yujunyao
  * Since: 2020/12/10 3:32 PM
@@ -12,6 +14,16 @@ import androidx.annotation.Nullable;
  */
 
 public class BundleManager {
+
+    private AsDrawable asDrawable;
+
+    public AsDrawable getAsDrawable() {
+        return asDrawable;
+    }
+
+    public void setAsDrawable(AsDrawable asDrawable) {
+        this.asDrawable = asDrawable;
+    }
 
     private Bundle bundle = new Bundle();
 
@@ -34,8 +46,13 @@ public class BundleManager {
         return this;
     }
 
-    public void navigation(Context context) {
-        RouterManager.getInstance().navigation(context, this);
+    public Object navigation(Context context) {
+        return RouterManager.getInstance().navigation(context, this);
+    }
+
+    public BundleManager withSerializable(@Nullable String key, Serializable value) {
+        bundle.putSerializable(key, value);
+        return this;
     }
 
 }

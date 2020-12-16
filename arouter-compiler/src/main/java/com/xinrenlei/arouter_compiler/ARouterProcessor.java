@@ -109,6 +109,9 @@ public class ARouterProcessor extends AbstractProcessor {
         //显示类信息（获取被注解的节点，类节点）
         TypeMirror activityMirror = activityType.asType();
 
+        TypeElement drawableType = elementTool.getTypeElement(ProcessorConfig.AS_DRAWABLE);
+        TypeMirror drawableMirror = drawableType.asType();
+
         //遍历所有的类节点
         for (Element element : elements) {
             //获取包节点
@@ -167,6 +170,8 @@ public class ARouterProcessor extends AbstractProcessor {
             //是否有android.app.Activity 的子类
             if (typeTool.isSubtype(elementMirror, activityMirror)) {
                 routerBean.setTypeEnum(RouterBean.TypeEnum.ACTIVITY);
+            }  else if (typeTool.isSubtype(elementMirror, drawableMirror)) {
+                routerBean.setTypeEnum(RouterBean.TypeEnum.DRAWABLE);
             } else {
                 throw new RuntimeException("@ARouter注解目前只能用在Activity类上面");
             }

@@ -69,7 +69,7 @@ public class RouterManager {
 
     private final static String AROUTER_GENERATE_PATH = "com.xinrenlei.arouter";
 
-    public void navigation(Context context, BundleManager bundleManager) {
+    public Object navigation(Context context, BundleManager bundleManager) {
         String groupClassName = AROUTER_GENERATE_PATH + "." + FILE_GROUP_NAME + group;
         LogUtils.e("navigation>>>> " + groupClassName);
 
@@ -116,6 +116,11 @@ public class RouterManager {
                         }
                         context.startActivity(intent);
                         break;
+                    case DRAWABLE:
+                        Class<?> clazz = routerBean.getClazz();
+                        AsDrawable asDrawable = (AsDrawable) clazz.newInstance();
+                        bundleManager.setAsDrawable(asDrawable);
+                        return bundleManager.getAsDrawable();
                 }
             }
 
@@ -123,6 +128,7 @@ public class RouterManager {
             e.printStackTrace();
         }
 
+        return null;
     }
 
 }

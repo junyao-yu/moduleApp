@@ -12,7 +12,7 @@ public class RouterBean {
 
     public enum TypeEnum {
         ACTIVITY,
-        DRAWABLE//eg: a模块调用b模块的资源
+        DRAWABLE//eg: a模块调用b模块的图片资源
     }
 
     private TypeEnum typeEnum;//枚举类型，eg: activity, drawable等等

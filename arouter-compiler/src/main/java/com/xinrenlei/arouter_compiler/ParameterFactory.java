@@ -3,6 +3,7 @@ package com.xinrenlei.arouter_compiler;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterSpec;
+import com.squareup.javapoet.TypeName;
 import com.xinrenlei.arouter_annotation.Parameter;
 import com.xinrenlei.arouter_compiler.utils.ProcessorConfig;
 import com.xinrenlei.arouter_compiler.utils.ProcessorUtils;
@@ -12,7 +13,8 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
-import javax.tools.Diagnostic;
+import javax.lang.model.util.Elements;
+import javax.lang.model.util.Types;
 
 /**
  * Auth：yujunyao
@@ -37,6 +39,10 @@ public class ParameterFactory {
     private ClassName className;
 
     private Messager messager;
+
+    private TypeMirror drawableMirror;
+
+    private Types typeUtils;
 
     public void addFirstStatement() {
         method.addStatement("$T t = ($T) " + ProcessorConfig.PARAMETER_NAME, className, className);
@@ -65,22 +71,35 @@ public class ParameterFactory {
         if (type == TypeKind.INT.ordinal()) {
             // t.s = t.getIntent().getIntExtra("age", t.age);
             methodContent += "getIntExtra($S, " + value + ")";//默认值
+            method.addStatement(methodContent, annotationValue);
         } else if (type == TypeKind.BOOLEAN.ordinal()) {
             // t.s = t.getIntent().getBooleanExtra("isSuccess", t.age);
             methodContent += "getBooleanExtra($S, " + value + ")";//默认值
+            method.addStatement(methodContent, annotationValue);
         } else {//String 类型没有序列号提供
             // t.s = t.getIntent.getStringExtra("s");
             // typeMirror.toString() java.lang.String
             if (typeMirror.toString().equalsIgnoreCase(ProcessorConfig.STRING)) {
                 methodContent += "getStringExtra($S)";//没有默认值
+                method.addStatement(methodContent, annotationValue);
+            } else if (typeUtils.isSubtype(typeMirror, drawableMirror)) {//ASDrawable接口
+                // t.orderDrawable = (OrderDrawable) RouterManager.getInstance().build("/order/getDrawable").navigation(t);
+                methodContent = value + " = ($T) $T.getInstance().build($S).navigation(t)";
+                method.addStatement(methodContent,
+                        TypeName.get(typeMirror),
+                        ClassName.get(ProcessorConfig.AROUTER_API_PACKAGE, ProcessorConfig.ROUTER_MANAGER),
+                        annotationValue);
+            } else if (typeMirror.toString().equalsIgnoreCase(ProcessorConfig.SERIALIZABLE)) {
+                methodContent = "t.getIntent().getSerializableExtra($S)";
+                method.addStatement(methodContent, annotationValue);
             }
         }
 
-        if (!methodContent.endsWith(")")) {
-            messager.printMessage(Diagnostic.Kind.ERROR, "目前暂支持String, int boolean传参");
-        } else {
-            method.addStatement(methodContent, annotationValue);
-        }
+//        if (!methodContent.endsWith(")")) {
+//            messager.printMessage(Diagnostic.Kind.ERROR, "目前暂支持String, int boolean传参");
+//        } else {
+//            method.addStatement(methodContent, annotationValue);
+//        }
     }
 
     public MethodSpec build() {
@@ -90,11 +109,14 @@ public class ParameterFactory {
     private ParameterFactory(Builder builder) {
         this.messager = builder.messager;
         this.className = builder.className;
+        this.typeUtils = builder.typeUtils;
 
         method = MethodSpec.methodBuilder(ProcessorConfig.PARAMETER_METHOD_NAME)
                 .addAnnotation(Override.class)
                 .addModifiers(Modifier.PUBLIC)
                 .addParameter(builder.parameterSpec);
+
+        drawableMirror = builder.elementUtils.getTypeElement(ProcessorConfig.AS_DRAWABLE).asType();
     }
 
     public static class Builder {
@@ -104,6 +126,10 @@ public class ParameterFactory {
 
         private ParameterSpec parameterSpec;
 
+        private Elements elementUtils;
+
+        private Types typeUtils;
+
         public Builder setMessager(Messager messager) {
             this.messager = messager;
             return this;
@@ -111,6 +137,16 @@ public class ParameterFactory {
 
         public Builder setClassName(ClassName className) {
             this.className = className;
+            return this;
+        }
+
+        public Builder setElementUtils(Elements elementUtils) {
+            this.elementUtils = elementUtils;
+            return this;
+        }
+
+        public Builder setTypeUtils(Types typeUtils) {
+            this.typeUtils = typeUtils;
             return this;
         }
 
